@@ -14,5 +14,21 @@ contract CalculatorInFallback {
         // sub(uint256,uint256) -> 0xb67d77c5 (sub two numbers and store result in storage)
         // mul(uint256,uint256) -> 0xc8a4ac9c (mul two numbers and store result in storage)
         // div(uint256,uint256) -> 0xa391c15b (div two numbers and store result in storage)
+
+        assembly ("memory-safe") {
+            switch shr(224, calldataload(0x00))
+            case 0x771602f7 { 
+                sstore(result.slot, add(calldataload(0x04), calldataload(0x24))) 
+            }
+            case 0xb67d77c5 { 
+                sstore(result.slot, sub(calldataload(0x04), calldataload(0x24))) 
+            }
+            case 0xc8a4ac9c { 
+                sstore(result.slot, mul(calldataload(0x04), calldataload(0x24))) 
+            }
+            case 0xa391c15b { 
+                sstore(result.slot, div(calldataload(0x04), calldataload(0x24))) 
+            }
+        }
     }
 }
