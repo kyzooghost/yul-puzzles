@@ -11,6 +11,11 @@ contract SendEther {
             // assume `amount` is in wei
             // hint: use the `call` opcode: https://docs.soliditylang.org/en/latest/yul.html#evm-dialect
             // hint: use the `gas` opcode to get the gas left
+            let success := call(gas(), to, amount, 0, 0, 0, 0)
+            if iszero(success) {
+                returndatacopy(0, 0, returndatasize())
+                revert(0, returndatasize())
+            }
         }
     }
 }
